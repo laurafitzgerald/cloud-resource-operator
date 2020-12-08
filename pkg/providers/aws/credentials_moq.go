@@ -36,7 +36,7 @@ var _ CredentialManager = &CredentialManagerMock{}
 // 	               panic("mock out the ReconcileSESCredentials method")
 //             },
 //             ReoncileBucketOwnerCredentialsFunc: func(ctx context.Context, name string, ns string, bucket string) (*Credentials, *v1.CredentialsRequest, error) {
-// 	               panic("mock out the ReoncileBucketOwnerCredentials method")
+// 	               panic("mock out the ReconcileBucketOwnerCredentials method")
 //             },
 //         }
 //
@@ -54,7 +54,7 @@ type CredentialManagerMock struct {
 	// ReconcileSESCredentialsFunc mocks the ReconcileSESCredentials method.
 	ReconcileSESCredentialsFunc func(ctx context.Context, name string, ns string) (*Credentials, error)
 
-	// ReoncileBucketOwnerCredentialsFunc mocks the ReoncileBucketOwnerCredentials method.
+	// ReoncileBucketOwnerCredentialsFunc mocks the ReconcileBucketOwnerCredentials method.
 	ReoncileBucketOwnerCredentialsFunc func(ctx context.Context, name string, ns string, bucket string) (*Credentials, *v1.CredentialsRequest, error)
 
 	// calls tracks calls to the methods.
@@ -86,7 +86,7 @@ type CredentialManagerMock struct {
 			// Ns is the ns argument value.
 			Ns string
 		}
-		// ReoncileBucketOwnerCredentials holds details about calls to the ReoncileBucketOwnerCredentials method.
+		// ReconcileBucketOwnerCredentials holds details about calls to the ReconcileBucketOwnerCredentials method.
 		ReoncileBucketOwnerCredentials []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
@@ -217,10 +217,10 @@ func (mock *CredentialManagerMock) ReconcileSESCredentialsCalls() []struct {
 	return calls
 }
 
-// ReoncileBucketOwnerCredentials calls ReoncileBucketOwnerCredentialsFunc.
-func (mock *CredentialManagerMock) ReoncileBucketOwnerCredentials(ctx context.Context, name string, ns string, bucket string) (*Credentials, *v1.CredentialsRequest, error) {
+// ReconcileBucketOwnerCredentials calls ReoncileBucketOwnerCredentialsFunc.
+func (mock *CredentialManagerMock) ReconcileBucketOwnerCredentials(ctx context.Context, name string, ns string, bucket string) (*Credentials, *v1.CredentialsRequest, error) {
 	if mock.ReoncileBucketOwnerCredentialsFunc == nil {
-		panic("CredentialManagerMock.ReoncileBucketOwnerCredentialsFunc: method is nil but CredentialManager.ReoncileBucketOwnerCredentials was just called")
+		panic("CredentialManagerMock.ReoncileBucketOwnerCredentialsFunc: method is nil but CredentialManager.ReconcileBucketOwnerCredentials was just called")
 	}
 	callInfo := struct {
 		Ctx    context.Context
@@ -239,7 +239,7 @@ func (mock *CredentialManagerMock) ReoncileBucketOwnerCredentials(ctx context.Co
 	return mock.ReoncileBucketOwnerCredentialsFunc(ctx, name, ns, bucket)
 }
 
-// ReoncileBucketOwnerCredentialsCalls gets all the calls that were made to ReoncileBucketOwnerCredentials.
+// ReoncileBucketOwnerCredentialsCalls gets all the calls that were made to ReconcileBucketOwnerCredentials.
 // Check the length with:
 //     len(mockedCredentialManager.ReoncileBucketOwnerCredentialsCalls())
 func (mock *CredentialManagerMock) ReoncileBucketOwnerCredentialsCalls() []struct {

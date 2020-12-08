@@ -173,6 +173,8 @@ func (p *RedisProvider) CreateRedis(ctx context.Context, r *v1alpha1.Redis) (*pr
 	}
 
 	// create the aws elasticache cluster
+	//return nil, "don't create the instance", errorUtil.Wrap(err, "don't create the instance")
+
 	return p.createElasticacheCluster(ctx, r, elasticache.New(sess), sts.New(sess), ec2.New(sess), elasticacheCreateConfig, stratCfg, isEnabled)
 }
 

@@ -157,7 +157,7 @@ func GetVPCSubnets(ec2Svc ec2iface.EC2API, logger *logrus.Entry, vpc *ec2.Vpc) (
 func GetPrivateSubnetIDS(ctx context.Context, c client.Client, ec2Svc ec2iface.EC2API, logger *logrus.Entry) ([]*string, error) {
 	logger.Info("gathering all private subnets in cluster vpc")
 	// get cluster vpc
-	foundVPC, err := getClusterVpc(ctx, c, ec2Svc, logger)
+	foundVPC, err := GetClusterVpc(ctx, c, ec2Svc, logger)
 	if err != nil {
 		return nil, errorUtil.Wrap(err, "error getting vpcs")
 	}
@@ -382,7 +382,7 @@ func containsNetwork(networks []net.IPNet, toFind net.IP) bool {
 }
 
 // Increment an IP address by a provided increment value
-// Makes cycling through IP addresses simple as we can keep incrememnting by 1 to iterate through a range of IPs
+// Makes cycling through IP addresses simple as we can keep incrementing by 1 to iterate through a range of IPs
 func incrementIP(ip net.IP, inc int) net.IP {
 	// It's not guaranteed that a provided IP will be in IPv4 format, we need to be able to split it into bytes. So
 	// ensure it is formatted correctly first.
@@ -418,7 +418,7 @@ func incrementIP(ip net.IP, inc int) net.IP {
 
 // returns vpc id and cidr block for found vpc
 func GetCidr(ctx context.Context, c client.Client, ec2Svc ec2iface.EC2API, logger *logrus.Entry) (string, string, error) {
-	foundVPC, err := getClusterVpc(ctx, c, ec2Svc, logger)
+	foundVPC, err := GetClusterVpc(ctx, c, ec2Svc, logger)
 	if err != nil {
 		return "", "", errorUtil.Wrap(err, "error getting vpcs")
 	}
@@ -458,7 +458,7 @@ func getSubnets(ec2Svc ec2iface.EC2API) ([]*ec2.Subnet, error) {
 }
 
 // function to get vpc of a cluster
-func getClusterVpc(ctx context.Context, c client.Client, ec2Svc ec2iface.EC2API, logger *logrus.Entry) (*ec2.Vpc, error) {
+func GetClusterVpc(ctx context.Context, c client.Client, ec2Svc ec2iface.EC2API, logger *logrus.Entry) (*ec2.Vpc, error) {
 	// first call to aws api from the network provider is to get cluster vpc
 	// polling to allow credential minter time to reconcile credentials
 	vpcs, err := ec2Svc.DescribeVpcs(&ec2.DescribeVpcsInput{})

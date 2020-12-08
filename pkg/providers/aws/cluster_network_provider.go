@@ -411,7 +411,7 @@ func (n *NetworkProvider) CreateNetworkConnection(ctx context.Context, network *
 	}
 
 	// we require the cluster vpc cidr block for standalone vpc route
-	clusterVpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, logger)
+	clusterVpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, logger)
 	if err != nil {
 		return nil, errorUtil.Wrap(err, "error getting standalone vpc route tables")
 	}
@@ -520,7 +520,7 @@ func (n *NetworkProvider) DeleteNetworkConnection(ctx context.Context, networkPe
 func (n *NetworkProvider) CreateNetworkPeering(ctx context.Context, network *Network) (*NetworkPeering, error) {
 	logger := resources.NewActionLogger(n.Logger, "CreateNetworkPeering")
 
-	clusterVpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, n.Logger)
+	clusterVpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, n.Logger)
 	if err != nil {
 		return nil, errorUtil.Wrap(err, "failed to get cluster vpc")
 	}
@@ -677,7 +677,7 @@ func (n *NetworkProvider) IsEnabled(ctx context.Context) (bool, error) {
 	logger := n.Logger.WithField("action", "isEnabled")
 
 	//check if there is a standalone vpc already created.
-	foundVpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, logger)
+	foundVpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, logger)
 	if err != nil {
 		return false, errorUtil.Wrap(err, "unable to get vpc")
 	}
@@ -760,7 +760,7 @@ func (n *NetworkProvider) DeleteBundledCloudResources(ctx context.Context) error
 	if securityGroup == nil {
 		return nil
 	}
-	vpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, logger)
+	vpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, logger)
 	if err != nil {
 		return errorUtil.Wrap(err, "error getting cluster vpc")
 	}
@@ -778,7 +778,7 @@ func (n *NetworkProvider) getNetworkPeering(ctx context.Context, network *Networ
 	logger := resources.NewActionLogger(n.Logger, "getNetworkPeering")
 	// we will always peer with the openshift/kubernetes cluster vpc that this operator is running on
 	logger.Info("getting cluster vpc")
-	clusterVpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, logger)
+	clusterVpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, logger)
 	if err != nil {
 		return nil, errorUtil.Wrap(err, "failed to get cluster vpc")
 	}
@@ -849,7 +849,7 @@ func (n *NetworkProvider) reconcileStandaloneSecurityGroup(ctx context.Context, 
 	}
 
 	// get the cluster bundled vpc
-	clusterVpc, err := getClusterVpc(ctx, n.Client, n.Ec2Api, logger)
+	clusterVpc, err := GetClusterVpc(ctx, n.Client, n.Ec2Api, logger)
 	if err != nil {
 		return nil, errorUtil.Wrap(err, "failed to get cluster vpc")
 	}
@@ -1552,7 +1552,7 @@ func validateStandaloneCidrBlock(ctx context.Context, client client.Client, ec2A
 		return errorUtil.New(fmt.Sprintf("%s is out of range, block sizes must be between `/16` and `/26`, please update `_network` strategy", vpcCidrBlock.String()))
 	}
 
-	clusterVPC, err := getClusterVpc(ctx, client, ec2Api, logger)
+	clusterVPC, err := GetClusterVpc(ctx, client, ec2Api, logger)
 	if err != nil {
 		return errorUtil.Wrap(err, "failed to get cluster vpc")
 	}

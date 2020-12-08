@@ -212,6 +212,7 @@ func (p *PostgresProvider) CreatePostgres(ctx context.Context, pg *v1alpha1.Post
 	}
 
 	// create the aws RDS instance
+	//return nil, "don't create the instance", errorUtil.Wrap(err, "don't create the instance")
 	return p.createRDSInstance(ctx, pg, rds.New(sess), ec2.New(sess), rdsCfg, isEnabled)
 }
 

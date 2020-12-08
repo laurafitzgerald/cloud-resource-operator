@@ -142,7 +142,7 @@ type Credentials struct {
 type CredentialManager interface {
 	ReconcileProviderCredentials(ctx context.Context, ns string) (*Credentials, error)
 	ReconcileSESCredentials(ctx context.Context, name, ns string) (*Credentials, error)
-	ReoncileBucketOwnerCredentials(ctx context.Context, name, ns, bucket string) (*Credentials, *v1.CredentialsRequest, error)
+	ReconcileBucketOwnerCredentials(ctx context.Context, name, ns, bucket string) (*Credentials, *v1.CredentialsRequest, error)
 	ReconcileCredentials(ctx context.Context, name string, ns string, entries []v1.StatementEntry) (*v1.CredentialsRequest, *Credentials, error)
 }
 
@@ -178,7 +178,7 @@ func (m *CredentialMinterCredentialManager) ReconcileSESCredentials(ctx context.
 	return creds, nil
 }
 
-func (m *CredentialMinterCredentialManager) ReoncileBucketOwnerCredentials(ctx context.Context, name, ns, bucket string) (*Credentials, *v1.CredentialsRequest, error) {
+func (m *CredentialMinterCredentialManager) ReconcileBucketOwnerCredentials(ctx context.Context, name, ns, bucket string) (*Credentials, *v1.CredentialsRequest, error) {
 	cr, creds, err := m.ReconcileCredentials(ctx, name, ns, buildPutBucketObjectEntries(bucket))
 	if err != nil {
 		return nil, nil, err

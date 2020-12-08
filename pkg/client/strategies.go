@@ -19,9 +19,7 @@ Building the correct maintenance and backup times necessary for specific cloud p
 package client
 
 import (
-	"context"
 	errorUtil "github.com/pkg/errors"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -39,11 +37,11 @@ type StrategyTimeConfig struct {
 	MaintenanceStartTime string
 }
 
-// ReconcileStrategyMaps to be used to reconcile strategy maps expected in RHMI installs
+// ReconcileStrategyMaps to be used to reconcile strategy maps expected in an external product usage of cro
 // A single function which can check the infrastructure and provision the correct strategy config map
-func ReconcileStrategyMaps(ctx context.Context, client client.Client, timeConfig *StrategyTimeConfig, tier, namespace string) error {
-	// reconciles aws specific strategy map
-	if err := reconcileAWSStrategyMap(ctx, client, timeConfig, tier, namespace); err != nil {
+func (c CloudResourceService) ReconcileStrategyMaps(timeConfig *StrategyTimeConfig, tier, namespace string) error {
+	// reconciles aws specific strategy maps
+	if err := reconcileAWSStrategyMap(c.Ctx, c.Client, timeConfig, tier, namespace); err != nil {
 		return errorUtil.Wrapf(err, "failed to reconcile aws strategy map")
 	}
 	return nil
